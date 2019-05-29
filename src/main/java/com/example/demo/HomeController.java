@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 public class HomeController {
@@ -25,13 +26,16 @@ public class HomeController {
     @GetMapping("/register")
     public String showRegistrationPage(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("studentRole", Arrays.asList(roleRepository.findByRole("STUDENT")));
+
         return "/registration";
     }
 
     @PostMapping("/register")
     public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-        model.addAttribute("user",user);
-        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("user", user);
+
         if(result.hasErrors()) {
             return "registration";
         }
@@ -43,7 +47,9 @@ public class HomeController {
     }
 
     @RequestMapping("/")
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("courses", courseRepository.findAll());
+
         return "index";
     }
 

@@ -13,7 +13,29 @@
 
 <div th:replace="base :: navlinks"></div>
 
-<h2>Insecure Page</h2>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Instructor</th>
+        <th>Credits</th>
+        <td>Actions</td>
+    </tr>
+    <tr th:each="course : ${courses}">
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.instructor}"></td>
+        <td th:text="${course.credit}"></td>
+        <td>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a th:href="@{/update/{id}(id=${course.id})}">Update</a> -
+            </div>
+            <a th:href="@{/detail/{id}(id=${course.id})}">Details</a>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                 - <a th:href="@{/delete/{id}(id=${course.id})}">Delete</a>
+            </div>
+
+        </td>
+    </tr>
+</table>
 
 
 <!--Bootstrap JS-->
