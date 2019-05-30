@@ -123,20 +123,10 @@ public class HomeController {
     @RequestMapping("/detailenrolled/{id}")
     public String showEnrolled(@PathVariable("id") long id, Model model) {
         model.addAttribute("course", courseRepository.findById(id).get());
-        return "showenrolled";
+        return "show";
     }
 
-//    @RequestMapping("/drop/{id}")
-//    public String dropCourse(@PathVariable("id") long id, Model model){
-//
-//        userService.getCurrentUser().getCourses().remove();
-//
-//        userRepository.save(userService.getCurrentUser());
-//        model.addAttribute("courses", courseRepository.findAll());
-//        model.addAttribute("user", userService.getCurrentUser());
-//
-//        return "studentenrolled";
-//    }
+
 
     @RequestMapping("/delete/{id}")
     public String delCourse(@PathVariable("id") long id){

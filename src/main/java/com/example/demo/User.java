@@ -38,7 +38,7 @@ public class User {
     private Collection<Role> roles;
 
     @LazyCollection(LazyCollectionOption.FALSE)
-    @ManyToMany()
+    @ManyToMany(cascade = CascadeType.ALL)
     private Collection<Course> courses;
 
     public User() {

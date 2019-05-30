@@ -30,7 +30,7 @@ public class Course {
     @Min(3)
     private int credit;
 
-    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Collection<User> users;
 
 
