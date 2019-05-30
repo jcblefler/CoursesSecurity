@@ -1,13 +1,11 @@
 package com.example.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Arrays;
@@ -23,34 +21,32 @@ public class HomeController {
     @Autowired
     private CourseRepository courseRepository;
 
-    @GetMapping("/register")
-    public String showRegistrationPage(Model model) {
-        model.addAttribute("user", new User());
-        model.addAttribute("roles", roleRepository.findAll());
-        model.addAttribute("studentRole", Arrays.asList(roleRepository.findByRole("STUDENT")));
+    @Autowired
+    private UserRepository userRepository;
 
-        return "/registration";
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register")
-    public String processRegistrationPage(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
-        model.addAttribute("user", user);
 
-        if(result.hasErrors()) {
-            return "registration";
-        }
-        else {
-            userService.saveUser(user);
-            model.addAttribute("message", "User Account Successfully Created");
-        }
-        return "index";
-    }
+
 
     @RequestMapping("/")
     public String index(Model model) {
         model.addAttribute("courses", courseRepository.findAll());
 
         return "index";
+    }
+
+    @RequestMapping("/test")
+    public String testStudent(Model model){
+        model.addAttribute("user", new User());
+        User user = new User("jim@bob.com",passwordEncoder.encode("password"),"Jim","Jimson",true,"jim");
+        Role studentRole = roleRepository.findByRole("STUDENT");
+
+        user.setRoles(Arrays.asList(studentRole));
+        userRepository.save(user);
+
+        return"test";
     }
 
     @RequestMapping("/login")
@@ -65,6 +61,32 @@ public class HomeController {
         return "secure";
     }
 
+
+
+    //Register Users
+
+    @GetMapping("/register")
+    public String showRegistrationPage(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("roles", roleRepository.findAll());
+        model.addAttribute("studentRole", Arrays.asList(roleRepository.findByRole("STUDENT")));
+
+        return "/registration";
+    }
+
+    @PostMapping("/register")
+    public String processRegistrationPage(@Valid @ModelAttribute("user") User user, @RequestParam("role") String role, BindingResult result, Model model) {
+        model.addAttribute("user", user);
+
+        if(result.hasErrors()) {
+            return "registration";
+        }
+        else {
+            userService.saveUser(user, role);
+            model.addAttribute("message", "User Account Successfully Created");
+        }
+        return "redirect:/";
+    }
 
 
     // Courses
@@ -82,6 +104,43 @@ public class HomeController {
         }
         courseRepository.save(course);
         return "redirect:/";
+    }
+
+    @RequestMapping("/detail/{id}")
+    public String showCourse(@PathVariable("id") long id, Model model) {
+        model.addAttribute("course", courseRepository.findById(id).get());
+        return "show";
+    }
+
+    @RequestMapping("/update/{id}")
+    public String updateCourse(@PathVariable("id") long id, Model model){
+        model.addAttribute("course", courseRepository.findById(id).get());
+        return "courseform";
+    }
+
+    @RequestMapping("/enroll/{id}")
+    public String enrollCourse(@PathVariable("id") long id, Model model){
+        // add course to current user
+        userService.getCurrentUser().setCourses(Arrays.asList(courseRepository.findById(id).get()));
+
+        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("user", userService.getCurrentUser());
+
+        return "studentenrolled";
+    }
+
+    @RequestMapping("/delete/{id}")
+    public String delCourse(@PathVariable("id") long id){
+        courseRepository.deleteById(id);
+        return "redirect:/";
+    }
+
+    @RequestMapping("/student")
+    public String studentPage(Model model){
+        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("user", userService.getCurrentUser());
+
+        return "studentenrolled";
     }
 
 }

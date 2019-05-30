@@ -32,6 +32,15 @@ public class UserService {
         return user;
     }
 
+
+    public void saveUser(User user, String role) {
+        user.setRoles(Arrays.asList(roleRepository.findByRole(role)));
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+
     public void saveUser(User user) {
         user.setRoles(Arrays.asList(roleRepository.findByRole("USER")));
         user.setEnabled(true);
@@ -41,6 +50,13 @@ public class UserService {
 
     public void saveAdmin(User user) {
         user.setRoles(Arrays.asList(roleRepository.findByRole("ADMIN")));
+        user.setEnabled(true);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    public void saveStudent(User user) {
+        user.setRoles(Arrays.asList(roleRepository.findByRole("STUDENT")));
         user.setEnabled(true);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);

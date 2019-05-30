@@ -1,12 +1,10 @@
 package com.example.demo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Collection;
 
 @Entity
 public class Course {
@@ -30,6 +28,11 @@ public class Course {
     @NotNull
     @Min(3)
     private int credit;
+
+    @ManyToMany(mappedBy = "courses", fetch = FetchType.LAZY)
+    private Collection<User> users;
+
+
 
     public long getId() {
         return id;
@@ -69,6 +72,14 @@ public class Course {
 
     public void setCredit(int credit) {
         this.credit = credit;
+    }
+
+    public Collection<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Collection<User> users) {
+        this.users = users;
     }
 
     public Course() {

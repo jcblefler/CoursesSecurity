@@ -52,7 +52,8 @@
     </mark>
     <input type="text" id="password" placeholder="Password" th:field="*{password}"/><br/>
 
-    <input type="checkbox" name="role" th:value="${user.setRoles(studentRole)}"> I am a student<br>
+    <input type="radio" name="role" value="STUDENT"> I am a Student<br>
+    <input type="radio" name="role" value="TEACHER">I am a Teacher<br>
 
     <button type="submit" class="btn btn-default">Submit</button>
 </form>
