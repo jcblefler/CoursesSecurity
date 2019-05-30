@@ -10,14 +10,19 @@
 </head>
 <body>
 
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
+<!--error messages if login info was incorrect-->
 <div th:if="${param.error}">
     Invalid username and password.
 </div>
 <div th:if="${param.logout}">
     You have been logged out.
 </div>
+
+
+<!--allows the user to log into their account-->
 <form th:action="@{/login}" method="post">
     <div>
         <label>User Name: <input type="text" name="username"/></label>

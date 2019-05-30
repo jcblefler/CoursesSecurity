@@ -10,8 +10,13 @@
 </head>
 <body>
 
+<!--This page is only visible to users with ADMIN role, since the button to get to this page so only visible to ADMINs-->
+
+
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
+    <!--Form to add a course-->
     <form action="#" th:action="@{/process}" th:object="${course}" method="post">
         <input type="hidden" th:field="*{id}"/>
 

@@ -31,6 +31,8 @@ public class DataLoader implements CommandLineRunner{
     public void run(String... strings) throws Exception{
         System.out.println("Loading data...");
 
+
+        // Load Roles into the RoleRepository
         roleRepository.save(new Role("USER"));
         roleRepository.save(new Role("ADMIN"));
         roleRepository.save(new Role("STUDENT"));
@@ -39,6 +41,8 @@ public class DataLoader implements CommandLineRunner{
         Role adminRole = roleRepository.findByRole("ADMIN");
         Role studentRole = roleRepository.findByRole("STUDENT");
 
+
+        //  Add pre-made users
         User user = new User("bob@bob.com",passwordEncoder.encode("password"),"Bob","Bobberson",true,"bob");
         user.setRoles(Arrays.asList(userRole));
         userRepository.save(user);
@@ -47,10 +51,12 @@ public class DataLoader implements CommandLineRunner{
         user.setRoles(Arrays.asList(adminRole));
         userRepository.save(user);
 
-        user = new User("admin@adm.com",passwordEncoder.encode("password"),"Admin","User",true,"admin");
+        user = new User("jac@student.com",passwordEncoder.encode("password"),"jac","User",true,"jac");
         user.setRoles(Arrays.asList(studentRole));
         userRepository.save(user);
 
+
+        //  Add pre-made courses
         Course course = new Course("Astrophysics", "Neil D Tyson", "Just a course on stars", 3);
         courseRepository.save(course);
 

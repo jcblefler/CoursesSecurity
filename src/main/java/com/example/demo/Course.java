@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
+@Table(name = "COURSE_DATA")
 public class Course {
 
     @Id

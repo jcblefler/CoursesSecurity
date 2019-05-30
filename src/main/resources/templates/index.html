@@ -10,25 +10,36 @@
 </head>
 <body>
 
-
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
+
 <table>
+
+    <!--Headers for table-->
     <tr>
         <th>Title</th>
         <th>Instructor</th>
         <th>Credits</th>
         <td>Actions</td>
     </tr>
+
+    <!--For each course in the CourseRepository print a row out displaying the course's variable info-->
     <tr th:each="course : ${courses}">
         <td th:text="${course.title}"></td>
         <td th:text="${course.instructor}"></td>
         <td th:text="${course.credit}"></td>
         <td>
+
+            <!--this <a> is only visible to users with ADMIN role-->
             <div sec:authorize="hasAuthority('ADMIN')">
                 <a th:href="@{/update/{id}(id=${course.id})}">Update</a> -
             </div>
+
+            <!--this <a> is visible to everyone but if clicked it will redirect to login if user has not done so yet-->
             <a th:href="@{/detail/{id}(id=${course.id})}">Details</a>
+
+            <!--this <a> is only visible to users with ADMIN role-->
             <div sec:authorize="hasAuthority('ADMIN')">
                  - <a th:href="@{/delete/{id}(id=${course.id})}">Delete</a>
             </div>

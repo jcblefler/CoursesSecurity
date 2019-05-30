@@ -10,16 +10,20 @@
 </head>
 <body>
 
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
 <h2>Secure Page</h2>
 
 <div>Welcome [[${user.firstName}]]!</div>
 
+<!--hasAuthority('ADMIN') only shows li to those who have the ADMIN role-->
 <div sec:authorize="hasAuthority('ADMIN')">
     Administrators will see this text.
 </div>
 
+
+<!--hasAuthority('USER') only shows li to those who have the USER role-->
 <div sec:authorize="hasAuthority('USER')">
     Users will see this text.
 </div>

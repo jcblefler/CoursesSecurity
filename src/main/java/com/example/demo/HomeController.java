@@ -37,18 +37,6 @@ public class HomeController {
         return "index";
     }
 
-    @RequestMapping("/test")
-    public String testStudent(Model model){
-        model.addAttribute("user", new User());
-        User user = new User("jim@bob.com",passwordEncoder.encode("password"),"Jim","Jimson",true,"jim");
-        Role studentRole = roleRepository.findByRole("STUDENT");
-
-        user.setRoles(Arrays.asList(studentRole));
-        userRepository.save(user);
-
-        return"test";
-    }
-
     @RequestMapping("/login")
     public String login() {
         return "login";
@@ -118,16 +106,37 @@ public class HomeController {
         return "courseform";
     }
 
+
     @RequestMapping("/enroll/{id}")
     public String enrollCourse(@PathVariable("id") long id, Model model){
         // add course to current user
-        userService.getCurrentUser().setCourses(Arrays.asList(courseRepository.findById(id).get()));
+        userService.getCurrentUser().setCourses(courseRepository.findById(id).get());
 
+        //re-save the user info with the updated courses, into the UserRepository
+        userRepository.save(userService.getCurrentUser());
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("user", userService.getCurrentUser());
 
         return "studentenrolled";
     }
+
+    @RequestMapping("/detailenrolled/{id}")
+    public String showEnrolled(@PathVariable("id") long id, Model model) {
+        model.addAttribute("course", courseRepository.findById(id).get());
+        return "showenrolled";
+    }
+
+//    @RequestMapping("/drop/{id}")
+//    public String dropCourse(@PathVariable("id") long id, Model model){
+//
+//        userService.getCurrentUser().getCourses().remove();
+//
+//        userRepository.save(userService.getCurrentUser());
+//        model.addAttribute("courses", courseRepository.findAll());
+//        model.addAttribute("user", userService.getCurrentUser());
+//
+//        return "studentenrolled";
+//    }
 
     @RequestMapping("/delete/{id}")
     public String delCourse(@PathVariable("id") long id){

@@ -10,19 +10,25 @@
 </head>
 <body>
 
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
-
+<!--Redirects back to the Homepage-->
 <a href="/">Show All Courses</a><br />
+
+<!--displays the course info-->
 Title: <span th:text="${course.title}"></span><br />
 Instructor: <span th:text="${course.instructor}"></span><br />
 Description: <p th:text="${course.description}"></p>
 Credits: <span th:text="${course.credit}"></span><br />
 
+
+<!--Only STUDENTs will see this button and have the ability to enroll-->
 <div sec:authorize="hasAuthority('STUDENT')">
     <a th:href="@{/enroll/{id}(id=${course.id})}">Enroll in this course</a>
 </div>
 
+<!--Only ADMINs will see this button and have the ability to delete-->
 <div sec:authorize="hasAuthority('ADMIN')">
     <a th:href="@{/delete/{id}(id=${course.id})}">Delete this course</a>
 </div>

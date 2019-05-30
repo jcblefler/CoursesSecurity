@@ -10,11 +10,13 @@
 </head>
 <body>
 
-
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
 <h2>New User Registration</h2>
 
+
+<!--Form to register a new user account-->
 <form autocomplete="off" action="#" th:action="@{/register}" th:object="${user}" method="post">
     First Name
     <mark>
@@ -52,6 +54,8 @@
     </mark>
     <input type="text" id="password" placeholder="Password" th:field="*{password}"/><br/>
 
+
+    <!--Only one of these inputs can be selected at a time. So the User can only be a Student or a Teacher, not both-->
     <input type="radio" name="role" value="STUDENT"> I am a Student<br>
     <input type="radio" name="role" value="TEACHER">I am a Teacher<br>
 

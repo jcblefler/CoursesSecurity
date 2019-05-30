@@ -44,7 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/css/**","/", "/h2/**", "/register").permitAll()
+                .antMatchers("/css/**","/", "/h2/**", "/register").permitAll() //These pages are the only ones that do not require the user to sign in
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().loginPage("/login").permitAll() // Must be on it's own line

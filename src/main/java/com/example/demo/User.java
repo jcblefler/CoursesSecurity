@@ -138,7 +138,7 @@ public class User {
         return courses;
     }
 
-    public void setCourses(Collection<Course> courses) {
-        this.courses = courses;
+    public void setCourses(Course course) {
+        courses.add(course);
     }
 }

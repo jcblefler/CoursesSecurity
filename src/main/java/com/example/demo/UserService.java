@@ -33,6 +33,7 @@ public class UserService {
     }
 
 
+    // using the current user and radio button selected, set the User's Role and save the user in the UserRepository
     public void saveUser(User user, String role) {
         user.setRoles(Arrays.asList(roleRepository.findByRole(role)));
         user.setEnabled(true);

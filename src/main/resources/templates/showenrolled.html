@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>test</title>
+    <title>Details</title>
 
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -10,7 +10,17 @@
 </head>
 <body>
 
+<!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
+
+<!--link to show all courses the user is enrolled in-->
+<a href="/student">Show Enrolled Courses</a><br />
+
+<!--displays the course info-->
+Title: <span th:text="${course.title}"></span><br />
+Instructor: <span th:text="${course.instructor}"></span><br />
+Description: <p th:text="${course.description}"></p>
+Credits: <span th:text="${course.credit}"></span><br />
 
 
 <!--Bootstrap JS-->
