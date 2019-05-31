@@ -18,8 +18,8 @@ public class Course {
     @Size(min = 4)
     private String title;
 
-    @NotNull
-    @Size(min = 3)
+//    @NotNull
+//    @Size(min = 3)
     private String instructor;
 
     @NotNull

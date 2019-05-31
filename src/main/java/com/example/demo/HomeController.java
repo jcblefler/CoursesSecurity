@@ -82,6 +82,8 @@ public class HomeController {
     @GetMapping("/add")
     public String courseForm(Model model){
         model.addAttribute("course", new Course());
+        model.addAttribute("user", userService.getCurrentUser());
+        model.addAttribute("userFullName", userService.getUserFullName());
         return "courseform";
     }
 
@@ -90,8 +92,22 @@ public class HomeController {
         if (result.hasErrors()){
             return "courseform";
         }
+
+        course.setInstructor(userService.getUserFullName());
         courseRepository.save(course);
-        return "redirect:/";
+
+        // if the course is not already in User.courses then allow the user to enroll
+        if(!userService.getCurrentUser().getCourses().contains(course)){
+            // add course to current user
+            userService.getCurrentUser().setCourses(course);
+
+            //re-save the user info with the updated courses, into the UserRepository
+            userRepository.save(userService.getCurrentUser());
+        }
+
+
+
+        return "redirect:/teacher";
     }
 
     @RequestMapping("/detail/{id}")
@@ -109,24 +125,23 @@ public class HomeController {
 
     @RequestMapping("/enroll/{id}")
     public String enrollCourse(@PathVariable("id") long id, Model model){
-        // add course to current user
-        userService.getCurrentUser().setCourses(courseRepository.findById(id).get());
 
-        //re-save the user info with the updated courses, into the UserRepository
-        userRepository.save(userService.getCurrentUser());
+        // if the course is not already in User.courses then allow the user to enroll
+        if(!userService.getCurrentUser().getCourses().contains(courseRepository.findById(id).get())){
+            // add course to current user
+            userService.getCurrentUser().setCourses(courseRepository.findById(id).get());
+
+            //re-save the user info with the updated courses, into the UserRepository
+            userRepository.save(userService.getCurrentUser());
+        }
+
+
+
         model.addAttribute("courses", courseRepository.findAll());
         model.addAttribute("user", userService.getCurrentUser());
 
         return "studentenrolled";
     }
-
-    @RequestMapping("/detailenrolled/{id}")
-    public String showEnrolled(@PathVariable("id") long id, Model model) {
-        model.addAttribute("course", courseRepository.findById(id).get());
-        return "show";
-    }
-
-
 
     @RequestMapping("/delete/{id}")
     public String delCourse(@PathVariable("id") long id){
@@ -140,6 +155,26 @@ public class HomeController {
         model.addAttribute("user", userService.getCurrentUser());
 
         return "studentenrolled";
+    }
+
+    @RequestMapping("/detailenrolled/{id}")
+    public String showEnrolled(@PathVariable("id") long id, Model model) {
+        model.addAttribute("course", courseRepository.findById(id).get());
+        return "showenrolled";
+    }
+
+    @RequestMapping("/teacher")
+    public String teacherPage(Model model){
+        model.addAttribute("courses", courseRepository.findAll());
+        model.addAttribute("user", userService.getCurrentUser());
+
+        return "teachercourses";
+    }
+
+    @RequestMapping("/detailteacher/{id}")
+    public String showTeacherCourses(@PathVariable("id") long id, Model model) {
+        model.addAttribute("course", courseRepository.findById(id).get());
+        return "teachershow";
     }
 
 }

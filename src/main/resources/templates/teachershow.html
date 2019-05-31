@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Course Form</title>
+    <title>Course</title>
 
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -10,29 +10,20 @@
 </head>
 <body>
 
-<!--This page is only visible to users with ADMIN role, since the button to get to this page so only visible to ADMINs-->
-
-
 <!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
-    <!--Form to add a course-->
-    <form action="#" th:action="@{/process}" th:object="${course}" method="post">
-        <input type="hidden" th:field="*{id}"/>
+<!--link to show all courses the user is enrolled in-->
+<a href="/teacher">Show Current Courses</a><br />
 
-        Title: <input type="text" th:field="*{title}"/>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span><br />
+<!--displays the course info-->
+Title: <span th:text="${course.title}"></span><br />
+Instructor: <span th:text="${course.instructor}"></span><br />
+Description: <p th:text="${course.description}"></p>
+Credits: <span th:text="${course.credit}"></span><br />
 
-        Instructor: <span th:text="${userFullName}"></span><br />
+<a th:href="@{/delete/{id}(id=${course.id})}">Delete</a>
 
-        Description: <textarea rows="3" th:field="*{description}"></textarea>
-        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span><br />
-
-        Credits: <input type="text" th:field="*{credit}" />
-        <span th:if="${#fields.hasErrors('credit')}" th:errors="*{credit}" ></span><br />
-        <br />
-        <input type="submit" value="Submit" />
-    </form>
 
 <!--Bootstrap JS-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

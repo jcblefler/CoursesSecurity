@@ -32,6 +32,13 @@ public class UserService {
         return user;
     }
 
+    public String getUserFullName(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentusername = authentication.getName();
+        User user = userRepository.findByUsername(currentusername);
+        String userFullName = user.getFirstName() + " " + user.getLastName();
+        return userFullName;
+    }
 
     // using the current user and radio button selected, set the User's Role and save the user in the UserRepository
     public void saveUser(User user, String role) {

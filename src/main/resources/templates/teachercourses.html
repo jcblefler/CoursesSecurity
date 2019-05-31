@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Course Form</title>
+    <title>Teacher page</title>
 
     <!--Bootstrap CSS-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -10,29 +10,32 @@
 </head>
 <body>
 
-<!--This page is only visible to users with ADMIN role, since the button to get to this page so only visible to ADMINs-->
-
-
 <!--pulls the navlinks code from base.html and displays it-->
 <div th:replace="base :: navlinks"></div>
 
-    <!--Form to add a course-->
-    <form action="#" th:action="@{/process}" th:object="${course}" method="post">
-        <input type="hidden" th:field="*{id}"/>
+<table>
 
-        Title: <input type="text" th:field="*{title}"/>
-        <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span><br />
+    <!--Headers for table-->
+    <tr>
+        <th>Title</th>
+        <th>Instructor</th>
+        <th>Credits</th>
+        <td>Actions</td>
+    </tr>
 
-        Instructor: <span th:text="${userFullName}"></span><br />
+    <!--For each course mapped to the current User, print a row out displaying the course's variable info-->
+    <tr th:each="course : ${user.courses}">
+        <td th:text="${course.title}"></td>
+        <td th:text="${course.instructor}"></td>
+        <td th:text="${course.credit}"></td>
 
-        Description: <textarea rows="3" th:field="*{description}"></textarea>
-        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></span><br />
+        <!--Show details of the individual course-->
+        <td>
+            <a th:href="@{/detailteacher/{id}(id=${course.id})}">Details</a>
+        </td>
+    </tr>
+</table>
 
-        Credits: <input type="text" th:field="*{credit}" />
-        <span th:if="${#fields.hasErrors('credit')}" th:errors="*{credit}" ></span><br />
-        <br />
-        <input type="submit" value="Submit" />
-    </form>
 
 <!--Bootstrap JS-->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
